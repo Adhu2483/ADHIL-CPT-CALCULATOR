@@ -1,84 +1,67 @@
-// Use a unique namespace to avoid browser conflicts
-var myCalc = {
-    currentInput: "",
-    history: []
-};
+var calcHistory = []; 
 
 function press(val) {
-    myCalc.currentInput += val;
-    updateDisplay();
-}
-
-function updateDisplay() {
-    const displayElement = document.getElementById("display");
-    if (displayElement) {
-        displayElement.value = myCalc.currentInput || "0";
+    var display = document.getElementById("display");
+    if (display.value === "0" || display.value === "Error") {
+        display.value = val;
+    } else {
+        display.value += val;
     }
 }
 
 function clearDisplay() {
-    myCalc.currentInput = ""; // Changed to All Clear for testing
-    updateDisplay();
+    document.getElementById("display").value = "0";
+}
+
+function filterHistory(query) {
+    var box = document.getElementById("historyBox");
+    box.innerHTML = ""; 
+
+    for (var i = 0; i < calcHistory.length; i++) {
+        if (calcHistory[i].includes(query)) {
+            var div = document.createElement("div");
+            div.textContent = calcHistory[i];
+            div.style.padding = "8px";
+            div.style.borderBottom = "1px solid #eee";
+            box.appendChild(div);
+        }
+    }
 }
 
 function calculate() {
-    if (!myCalc.currentInput) return;
+    var display = document.getElementById("display");
+    var currentInput = display.value;
 
     try {
-        // 1. Clean the input (replaces 'smart' characters from mobile/copy-paste)
-        let mathString = myCalc.currentInput
-            .replace(/−/g, "-")
-            .replace(/×/g, "*")
-            .replace(/÷/g, "/");
-
-        // 2. Evaluate
+        var mathString = currentInput.replace(/×/g, "*")
+                                     .replace(/÷/g, "/")
+                                     .replace(/−/g, "-");
+        
         var result = eval(mathString);
 
-        // 3. Update History
-        addToHistory(myCalc.currentInput, result);
+        var entry = currentInput + " = " + result;
+        calcHistory.push(entry);
 
-        // 4. Update UI
-        myCalc.currentInput = result.toString();
-        updateDisplay();
-
-    } catch (err) {
-        // THIS WILL TELL YOU THE TRUTH:
-        console.error("CRITICAL ERROR:", err.message);
-        console.log("Input attempted:", myCalc.currentInput);
+        display.value = result;
+        filterHistory(""); 
         
-        document.getElementById("display").value = "Error";
-        myCalc.currentInput = "";
+    } catch (err) {
+        display.value = "Error";
     }
 }
 
 function square() {
+    var display = document.getElementById("display");
     try {
-        let val = eval(myCalc.currentInput.replace(/−/g, "-"));
-        let result = val * val;
-        addToHistory(myCalc.currentInput + "²", result);
-        myCalc.currentInput = result.toString();
-        updateDisplay();
+        var val = eval(display.value.replace(/−/g, "-"));
+        var result = val * val;
+        
+        var entry = display.value + "² = " + result;
+        calcHistory.push(entry);
+        
+        display.value = result;
+        filterHistory(""); 
     } catch (err) {
-        console.error("Square Error:", err.message);
-        document.getElementById("display").value = "Error";
+        display.value = "Error";
     }
-}
-
-function addToHistory(expression, result) {
-    const box = document.getElementById("historyBox");
-    if (!box) {
-        console.warn("History element 'historyBox' not found in HTML!");
-        return;
-    }
-
-    const entry = expression + " = " + result;
-    myCalc.history.push(entry);
-
-    const div = document.createElement("div");
-    div.textContent = entry;
-    div.style.borderBottom = "1px solid #444";
-    div.style.padding = "5px";
-    
-    // Add to the top of the history list
-    box.insertBefore(div, box.firstChild);
 }
