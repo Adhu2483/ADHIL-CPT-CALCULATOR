@@ -2,8 +2,23 @@ var calcHistory = [];
 
 function press(val) {
     var display = document.getElementById("display");
-    if (display.value === "0" || display.value === "Error") {
+    
+    
+    var operators = ["+", "-", "−", "*", "×", "/", "÷", ".", "(", ")"];
+
+    if (display.value === "Error" || display.value === "Undefined") {
         display.value = val;
+        return;
+    }
+
+    if (display.value === "0") {
+        
+        if (operators.includes(val)) {
+            display.value = "0" + val;
+        } else {
+           
+            display.value = val;
+        }
     } else {
         display.value += val;
     }
@@ -37,7 +52,14 @@ function calculate() {
                                      .replace(/÷/g, "/")
                                      .replace(/−/g, "-");
         
+        if (mathString.includes("/0")) {
+            display.value = "Undefined";
+            return; 
+        }
+
         var result = eval(mathString);
+
+        
 
         var entry = currentInput + " = " + result;
         calcHistory.push(entry);
@@ -65,3 +87,10 @@ function square() {
         display.value = "Error";
     }
 }
+
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault(); 
+        calculate();
+    }
+});
