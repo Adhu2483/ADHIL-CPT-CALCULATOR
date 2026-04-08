@@ -44,23 +44,23 @@ button {
     color: white;
 }
 
-/* Number buttons */
+
 button:nth-child(n+5):not(:nth-child(4n)) {
     background-color: #333333;
 }
 
-/* Operator buttons (Right column) */
+
 button:nth-child(4n), button:last-child {
     background-color: #ff9f0a;
 }
 
-/* Top row buttons (Gray) */
+
 button:nth-child(-n+3) {
     background-color: #a5a5a5;
     color: black;
 }
 
-/* Special case for zero button (Span 2) */
+
 button[onclick="press('0')"] {
     grid-column: span 2;
     width: 152px;
@@ -89,7 +89,7 @@ button:active {
     margin-top: 10px;
     max-height: 120px;
     overflow-y: auto;
-    color: #ffffff; /* This makes the text white */
+    color: #ffffff; 
     font-size: 1.1rem;
     text-align: right;
     padding-right: 10px;
@@ -98,5 +98,5 @@ button:active {
 .history-item {
     padding: 10px 0;
     border-bottom: 0.5px solid #333;
-    color: #ffffff; /* Extra insurance for the text color */
+    color: #ffffff; 
 }
