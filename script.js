@@ -1,3 +1,5 @@
+//Youtube calculator tutorial was used for a base logic on the calculator.
+
 var calcHistory = []; 
 
 function press(val) {
@@ -48,7 +50,7 @@ function calculate() {
     var currentInput = display.value;
 
     try {
-        var mathString = currentInput.replace(/×/g, "*")
+        var mathString = currentInput.replace(/×/g, "*") //Gemini helped me replace sybols to javascript operators.
                                      .replace(/÷/g, "/")
                                      .replace(/−/g, "-");
         
@@ -72,7 +74,7 @@ function calculate() {
     }
 }
 
-function square() {
+function square() { // this function squares the two vlaues whenever the square button is clicked.
     var display = document.getElementById("display");
     try {
         var val = eval(display.value.replace(/−/g, "-"));
@@ -88,7 +90,7 @@ function square() {
     }
 }
 
-document.addEventListener("keydown", function(event) {
+document.addEventListener("keydown", function(event) { //Whenever enter is pressed, it does the same function as pressing "="
     if (event.key === "Enter") {
         event.preventDefault(); 
         calculate();
